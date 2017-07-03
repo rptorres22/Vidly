@@ -41,12 +41,27 @@ namespace Vidly.Controllers
         //    return View();
         //}
         [HttpPost]
-        public ActionResult Create(Customer customer)
+        public ActionResult Save(Customer customer)
         {
             //MVC is smart enough to bind the customer model to the viewModel that is passed
             //because the viewModel is prefixed with Customer
 
-            _context.Customers.Add(customer);
+            if (customer.Id == 0)
+                _context.Customers.Add(customer);
+            else
+            {
+                var customerInDb = _context.Customers.Single(c => c.Id == customer.Id);
+
+                // can possibly use AutoMappter
+                // Mapper.Map(customer, customerInDb);
+
+                customerInDb.Name = customer.Name;
+                customerInDb.Birthdate = customer.Birthdate;
+                customerInDb.MembershipTypeId = customer.MembershipTypeId;
+                customerInDb.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
+            }
+
+
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Customers");
