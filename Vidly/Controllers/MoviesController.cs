@@ -46,8 +46,8 @@ namespace Vidly.Controllers
 
         public ActionResult New()
         {
-
             var genres = _context.Genres.ToList();
+
             var viewModel = new MovieFormViewModel
             {
                 Genres = genres
@@ -56,6 +56,7 @@ namespace Vidly.Controllers
             return View("MovieForm", viewModel);
         }
 
+        [HttpPost]
         public ActionResult Save(Movie movie)
         {
             //MVC is smart enough to bind the movie model to the viewModel that is passed
