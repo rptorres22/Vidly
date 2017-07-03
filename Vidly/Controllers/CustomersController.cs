@@ -35,10 +35,21 @@ namespace Vidly.Controllers
             return View(viewModel);
         }
 
+        //[HttpPost]
+        //public ActionResult Create(NewCustomerViewModel viewModel)
+        //{
+        //    return View();
+        //}
         [HttpPost]
-        public ActionResult Create(NewCustomerViewModel viewModel)
+        public ActionResult Create(Customer customer)
         {
-            return View();
+            //MVC is smart enough to bind the customer model to the viewModel that is passed
+            //because the viewModel is prefixed with Customer
+
+            _context.Customers.Add(customer);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Customers");
         }
 
         public ActionResult Index()
