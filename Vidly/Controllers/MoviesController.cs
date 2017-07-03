@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -41,6 +42,47 @@ namespace Vidly.Controllers
                 return HttpNotFound();
 
             return View(movie);
+        }
+
+        public ActionResult New()
+        {
+
+            var genres = _context.Genres.ToList();
+            var viewModel = new MovieFormViewModel
+            {
+                Genres = genres
+            };
+
+            return View("MovieForm", viewModel);
+        }
+
+        public ActionResult Save(Movie movie)
+        {
+            //MVC is smart enough to bind the movie model to the viewModel that is passed
+            //because the viewModel is prefixed with Movie
+
+            if (movie.Id == 0)
+            {
+                movie.DateAdded = DateTime.Now;
+                _context.Movies.Add(movie);
+            }
+            else
+            {
+                //var movieInDb = _context.Movies.Single(m => m.Id == movie.Id);
+
+                //// can possibly use AutoMappter
+                //// Mapper.Map(customer, customerInDb);
+
+                //movieInDb.Name = movie.Name;
+                //movieInDb.GenreId = movie.GenreId;
+                //movieInDb.DateAdded = DateTime.Now;
+                //movieInDb.ReleaseDate = movie.ReleaseDate;
+                //movieInDb.NumberInStock = movie.NumberInStock;
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Movies");
         }
 
         // GET: Movies/Random
