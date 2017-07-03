@@ -68,21 +68,37 @@ namespace Vidly.Controllers
             }
             else
             {
-                //var movieInDb = _context.Movies.Single(m => m.Id == movie.Id);
+                var movieInDb = _context.Movies.Single(m => m.Id == movie.Id);
 
-                //// can possibly use AutoMappter
-                //// Mapper.Map(customer, customerInDb);
+                // can possibly use AutoMappter
+                // Mapper.Map(customer, customerInDb);
 
-                //movieInDb.Name = movie.Name;
-                //movieInDb.GenreId = movie.GenreId;
-                //movieInDb.DateAdded = DateTime.Now;
-                //movieInDb.ReleaseDate = movie.ReleaseDate;
-                //movieInDb.NumberInStock = movie.NumberInStock;
+                movieInDb.Name = movie.Name;
+                movieInDb.GenreId = movie.GenreId;
+                movieInDb.DateAdded = DateTime.Now;
+                movieInDb.ReleaseDate = movie.ReleaseDate;
+                movieInDb.NumberInStock = movie.NumberInStock;
             }
 
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Movies");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var movie = _context.Movies.SingleOrDefault(m => m.Id == id);
+
+            if (movie == null)
+                return HttpNotFound();
+
+            var viewModel = new MovieFormViewModel
+            {
+                Movie = movie,
+                Genres = _context.Genres.ToList()
+            };
+
+            return View("MovieForm", viewModel);
         }
 
         // GET: Movies/Random
