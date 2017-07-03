@@ -46,6 +46,19 @@ namespace Vidly.Controllers
             //MVC is smart enough to bind the customer model to the viewModel that is passed
             //because the viewModel is prefixed with Customer
 
+            //Adding Validation
+            //This utilizes the data annotations on the model
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
+
+                return View("CustomerForm", viewModel);
+            }
+
             if (customer.Id == 0)
                 _context.Customers.Add(customer);
             else
