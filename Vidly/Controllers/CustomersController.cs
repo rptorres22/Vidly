@@ -42,6 +42,7 @@ namespace Vidly.Controllers
         //    return View();
         //}
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Customer customer)
         {
             //MVC is smart enough to bind the customer model to the viewModel that is passed
